@@ -2,14 +2,14 @@ UVG
 GRAFICAS POR COMPUTADORA - seccion 20
 Davis Alvarez - 15842
 
-#Laboratorio 3:UI 
+# Laboratorio 3:UI 
 
 Desarrollado en PyCharm.
 
 Para probar el codigo ejecutar el archivo "principal15842.py",
 lo que iniciara el juego.
 
-El programa contiene las siguientes funcionalidades requeridad en el laboratorio:
+El programa contiene las siguientes funcionalidades requeridas en el laboratorio:
 
 -Título (escogido por el alumno) con cualquier font y color.
 -Botón de Inicio: al presionar, desaparece la pantalla de inicio y se carga el nivel hecho con su RayCaster.
