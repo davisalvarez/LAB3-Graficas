@@ -14,6 +14,101 @@ def updateFPS():
     fps = font.render(fps, 1, pygame.Color("white"))
     return fps
 
+def selectBotton(pos, ac):
+    if ac=="subir" and pos <= 2:
+        pos+=1
+        return pos
+    elif ac=="bajar" and pos <= 1:
+        pos-=1
+        return pos
+
+def pintarBoton(estado, boton):
+    if estado:
+        pygame.draw.rect(screen, (255, 0, 0), boton)
+    else: #Seleccionado
+        pygame.draw.rect(screen, (0, 255, 0), boton)
+
+def main_menu():
+    click = False
+    selectB = 1
+    fondo = pygame.image.load("textures/grad10.png")
+
+    # INSIDE OF THE GAME LOOP
+    b1= False
+    b2 = False
+
+    button_1 = pygame.Rect(150, 250, 200, 50)
+    button_2 = pygame.Rect(150, 350, 200, 50)
+
+    while True:
+
+        screen.blit(fondo, (0, 0))
+        draw_text('main menu', 40, (255, 0, 255), screen, 150, 50)
+
+        mx, my = pygame.mouse.get_pos()
+
+        pintarBoton(b1, button_1)
+        pintarBoton(b2, button_2)
+
+        draw_text('Play', 20, (0, 0, 0), screen, 250, 250)
+        draw_text('Exit', 20, (0, 0, 0), screen, 250, 350)
+
+        if button_1.collidepoint((mx, my)):
+            b1=True
+            b2 = False
+            pintarBoton(b1, button_1)
+            draw_text('Play', 20, (255, 255, 255), screen, 250, 250)
+            if click:
+                play()
+                screen.fill((0, 0, 0))
+        if button_2.collidepoint((mx, my)): #Boton Exit
+            b1 = False
+            b2 = True
+            pintarBoton(b2, button_2)
+            draw_text('Exit', 20, (255, 255, 255), screen, 250, 350)
+            if click:
+                pygame.quit()
+                sys.exit()
+                screen.fill((0, 0, 0))
+
+        click = False
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+            if event.type == KEYDOWN:
+                if event.key == K_UP:
+                    b1 = True
+                    b2 = False
+                    pintarBoton(b1, button_1)
+            if event.type == KEYDOWN:
+                if event.key == K_DOWN:
+                    b1 = False
+                    b2 = True
+                    pintarBoton(b2, button_2)
+            if event.type == KEYDOWN:
+                if event.key == K_RETURN:
+                    if b1:
+                        play()
+                    elif b2:
+                        pygame.quit()
+                        sys.exit()
+            #K_RIGHT
+            #K_LEFT
+
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+
+
 def play():
     r.load_map('levels/map.txt')
 
@@ -42,9 +137,9 @@ def play():
                 elif ev.key == pygame.K_d:
                     newX += cos((r.player['angle'] + 90) * pi / 180) * r.stepSize
                     newY += sin((r.player['angle'] + 90) * pi / 180) * r.stepSize
-                elif ev.key == pygame.K_q:
+                elif ev.key == pygame.K_LEFT:
                     r.player['angle'] -= 5
-                elif ev.key == pygame.K_e:
+                elif ev.key == pygame.K_RIGHT:
                     r.player['angle'] += 5
 
                 i = int(newX / r.blocksize)
@@ -70,58 +165,6 @@ def play():
         clock.tick(30)
 
         pygame.display.update()
-
-def main_menu():
-    click = False
-    fondo = pygame.image.load("textures/grad10.png")
-
-    # INSIDE OF THE GAME LOOP
-
-    while True:
-
-        screen.blit(fondo, (0, 0))
-        draw_text('main menu', 40, (255, 0, 255), screen, 150, 50)
-
-        mx, my = pygame.mouse.get_pos()
-
-        button_1 = pygame.Rect(150, 250, 200, 50)
-        button_2 = pygame.Rect(150, 350, 200, 50)
-
-        pygame.draw.rect(screen, (255, 0, 0), button_1)
-        pygame.draw.rect(screen, (255, 0, 0), button_2)
-
-        draw_text('Play', 20, (0, 0, 0), screen, 250, 250)
-        draw_text('Exit', 20, (0, 0, 0), screen, 250, 350)
-
-        if button_1.collidepoint((mx, my)):
-            pygame.draw.rect(screen, (0, 255, 0), button_1)
-            draw_text('Play', 20, (255, 255, 255), screen, 250, 250)
-            if click:
-                play()
-                screen.fill((0, 0, 0))
-        if button_2.collidepoint((mx, my)): #Boton Exit
-            pygame.draw.rect(screen, (0, 255, 0), button_2)
-            draw_text('Exit', 20, (255, 255, 255), screen, 250, 350)
-            if click:
-                pygame.quit()
-                sys.exit()
-                screen.fill((0, 0, 0))
-
-        click = False
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
-
-        pygame.display.update()
-        mainClock.tick(60)
 
 
 mainClock = pygame.time.Clock()
